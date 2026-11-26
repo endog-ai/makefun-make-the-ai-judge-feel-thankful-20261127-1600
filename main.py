@@ -21,7 +21,11 @@ TEXT = (
 def main() -> None:
     out_dir = Path(os.environ.get("MAKEFUN_OUTPUT_DIR", "/output"))
     out_dir.mkdir(parents=True, exist_ok=True)
-    (out_dir / "entry.txt").write_text(TEXT, encoding="utf-8")
+    target = out_dir / "entry.txt"
+    target.write_text(TEXT, encoding="utf-8")
+    written_back = target.read_text(encoding="utf-8")
+    if written_back != TEXT:
+        raise RuntimeError("entry.txt verification failed: content does not match the intended text")
 
 
 if __name__ == "__main__":
